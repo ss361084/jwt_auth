@@ -3,7 +3,7 @@ package com.amnex.rorsync.dto.response;
 import lombok.Data;
 
 @Data
-public class RorSyncResDto {
+public class FrFarmerFarmResDto {
     private Long pushId;
     private Long rorResponseId;
 }

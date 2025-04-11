@@ -1,18 +1,17 @@
 package com.amnex.rorsync.service.impl;
 
-import com.amnex.rorsync.dto.RorSyncUniqueDto;
-import com.amnex.rorsync.dto.request.RorSyncDto;
+import com.amnex.rorsync.dto.FrFarmerFarmUniqueDto;
+import com.amnex.rorsync.dto.request.FrFarmerFarmDto;
+import com.amnex.rorsync.dto.response.FrFarmerFarmResDto;
+import com.amnex.rorsync.dto.response.FrFarmerFarmResponseDto;
 import com.amnex.rorsync.dto.response.ResponseModel;
-import com.amnex.rorsync.dto.response.RorSyncResDto;
-import com.amnex.rorsync.dto.response.RorSyncResponseDto;
-import com.amnex.rorsync.entity.RorSyncData;
-import com.amnex.rorsync.mapper.RorSyncMapper;
-import com.amnex.rorsync.repository.RorSyncDataRepository;
-import com.amnex.rorsync.service.RorSyncService;
+import com.amnex.rorsync.entity.FrFarmerFarmData;
+import com.amnex.rorsync.mapper.FrFarmerFarmMapper;
+import com.amnex.rorsync.repository.FrFarmerFarmDataRepository;
+import com.amnex.rorsync.service.FrFarmerFarmService;
 import com.amnex.rorsync.util.CommonUtils;
 import com.amnex.rorsync.util.Constants;
 import com.amnex.rorsync.util.JdbcUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,53 +22,51 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class RorSyncServiceImpl implements RorSyncService {
+public class FrFarmerFarmServiceImpl implements FrFarmerFarmService {
 
     @Autowired
-    private RorSyncMapper rorSyncMapper;
+    private FrFarmerFarmMapper frFarmerFarmMapper;
 
     @Autowired
     private CommonUtils commonUtils;
 
     @Autowired
-    private RorSyncDataRepository rorSyncDataRepository;
+    private FrFarmerFarmDataRepository frFarmerFarmDataRepository;
 
     @Autowired
     private JdbcUtil jdbcUtil;
 
-    BiFunction<List<RorSyncUniqueDto>, RorSyncDto, Boolean> rorSyncDataIsExists = (list, syncData) -> list.stream().anyMatch(u -> u.getFarmerId().equals(syncData.getFarmerId()) && u.getFarmId().equals(syncData.getFarmId()));
+    BiFunction<List<FrFarmerFarmUniqueDto>, FrFarmerFarmDto, Boolean> FrFarmerFarmDataIsExists = (list, syncData) -> list.stream().anyMatch(u -> u.getFarmerId().equals(syncData.getFarmerId()) && u.getFarmId().equals(syncData.getFarmId()));
 
     @Override
-    public ResponseModel pushRorData(List<RorSyncDto> rorSyncDtoList, HttpServletRequest request) {
+    public ResponseModel pushRorData(List<FrFarmerFarmDto> FrFarmerFarmDtoList, HttpServletRequest request) {
         ResponseModel model = new ResponseModel();
         try {
-            if(rorSyncDtoList.isEmpty()) {
+            if(FrFarmerFarmDtoList.isEmpty()) {
                 model.setMessage(Constants.No_DATA_FOUND);
                 model.setCode(Constants.NOT_FOUND_CODE);
             } else {
                 String userId = commonUtils.getUserId(request);
-                List<RorSyncResDto> responseDtos = new ArrayList<>();
-                List<RorSyncDto> duplicateRecords = new ArrayList<>();
+                List<FrFarmerFarmResDto> responseDtos = new ArrayList<>();
+                List<FrFarmerFarmDto> duplicateRecords = new ArrayList<>();
                 final AtomicInteger counter = new AtomicInteger();
-                Collection<List<RorSyncDto>> result = rorSyncDtoList.stream().collect(Collectors.groupingBy(it -> counter.getAndIncrement() / 100)).values();
+                Collection<List<FrFarmerFarmDto>> result = FrFarmerFarmDtoList.stream().collect(Collectors.groupingBy(it -> counter.getAndIncrement() / 100)).values();
                 result.parallelStream().forEach(syncData -> {
                     // check duplication records
                     String combiningRecords = syncData.stream()
-                        .map(rorSyncMapper::toUniqueDto)
+                        .map(frFarmerFarmMapper::toUniqueDto)
                         .map(entry -> String.format("('%s','%s')", entry.getFarmerId(), entry.getFarmId()))
                         .collect(Collectors.joining(", "));
                     if(StringUtils.isNotEmpty(combiningRecords)) {
                         String combineRecords = jdbcUtil.findExistingRolesUsingJdbc(combiningRecords);
-                        List<RorSyncUniqueDto> duplicateList = commonUtils.convertJsonToList(combineRecords, RorSyncUniqueDto.class);
+                        List<FrFarmerFarmUniqueDto> duplicateList = commonUtils.convertJsonToList(combineRecords, FrFarmerFarmUniqueDto.class);
                         if(!duplicateList.isEmpty()) {
                             syncData = syncData.stream().filter(rec -> {
-                                boolean recordsFound = rorSyncDataIsExists.apply(duplicateList,rec);
+                                boolean recordsFound = FrFarmerFarmDataIsExists.apply(duplicateList,rec);
                                 if(recordsFound) {
                                     duplicateRecords.add(rec);
                                 }
@@ -78,8 +75,8 @@ public class RorSyncServiceImpl implements RorSyncService {
                         }
                     }
                     if(!syncData.isEmpty()) {
-                        List<RorSyncData> syncFinalData = syncData.stream()
-                                .map(rorSyncMapper::toEntity)
+                        List<FrFarmerFarmData> syncFinalData = syncData.stream()
+                                .map(frFarmerFarmMapper::toEntity)
                                 .map(e -> {
                                     e.setCreatedBy(userId);
                                     e.setCreatedOn(new Timestamp(new Date().getTime()));
@@ -88,14 +85,14 @@ public class RorSyncServiceImpl implements RorSyncService {
                                     return e;
                                 })
                                 .collect(Collectors.toList());
-                        syncFinalData = rorSyncDataRepository.saveAll(syncFinalData);
-                        List<RorSyncResDto> responseList = syncFinalData.stream().map(rorSyncMapper::toResposneDto).collect(Collectors.toList());
+                        syncFinalData = frFarmerFarmDataRepository.saveAll(syncFinalData);
+                        List<FrFarmerFarmResDto> responseList = syncFinalData.stream().map(frFarmerFarmMapper::toResposneDto).collect(Collectors.toList());
                         if(!responseList.isEmpty()) {
                             responseDtos.addAll(responseList);
                         }
                     }
                 });
-                RorSyncResponseDto finalResponse = new RorSyncResponseDto();
+                FrFarmerFarmResponseDto finalResponse = new FrFarmerFarmResponseDto();
                 finalResponse.setPushedRecords(responseDtos);
                 finalResponse.setDuplicateRecords(duplicateRecords);
 

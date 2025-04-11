@@ -3,7 +3,7 @@ package com.amnex.rorsync.dto.request;
 import lombok.Data;
 
 @Data
-public class RorSyncDto {
+public class FrFarmerFarmDto {
     private String vaultRefNumber;
     private String farmerStatus;
     private String farmerId;

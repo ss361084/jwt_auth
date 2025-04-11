@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RorSyncUniqueDto {
+public class FrFarmerFarmUniqueDto {
     private String farmerId;
     private String farmId;
     private Long pushId;

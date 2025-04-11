@@ -98,10 +98,10 @@
     <changeSet id="110420251020" author="sumit.sharma" runOnChange="false">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="ror_sync_data" schemaName="public"/>
+                <tableExists tableName="fr_farmer_farm_data" schemaName="public"/>
             </not>
         </preConditions>
-        <createTable tableName="ror_sync_data" schemaName="public">
+        <createTable tableName="fr_farmer_farm_data" schemaName="public">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
