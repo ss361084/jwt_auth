@@ -88,7 +88,7 @@
             referencedTableSchemaName="public"/>
 
         <insert tableName="user_master" schemaName="public">
-            <column name="user_name" value="superAdmin" />
+            <column name="user_name" value="agristack" />
             <column name="user_password" value="$2a$10$9UG5YBsQK.dQ6cyg1mpHoOtC9xzrALFfjdRaY6OWelSE7bk.cYorq"/>
             <column name="role_id" valueComputed="(SELECT role_id FROM public.role_master WHERE role_name = 'admin')" />
             <column name="is_active" valueBoolean="true"/>
