@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!--insert role Master-->
+    <changeSet id="110420251012" author="sumit.sharma" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="role_master" schemaName="public"/>
+            </not>
+        </preConditions>
+        <createTable tableName="role_master" schemaName="public">
+            <column name="role_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="role_name" type="varchar(100)"/>
+            <column name="is_active" type="boolean">
+                <constraints nullable="true"/>
+            </column>
+            <column name="is_deleted" type="boolean">
+                <constraints nullable="true"/>
+            </column>
+            <column name="modified_by" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_by" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <insert tableName="role_master" schemaName="public">
+            <column name="role_name" value="admin" />
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_deleted" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+    <!--insert User Master-->
+    <changeSet id="110420251015" author="sumit.sharma" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_master" schemaName="public"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user_master" schemaName="public">
+            <column name="user_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_name" type="varchar(255)"/>
+            <column name="user_password" type="varchar(255)"/>
+            <column name="user_token" type="TEXT"/>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="boolean">
+                <constraints nullable="true"/>
+            </column>
+            <column name="is_deleted" type="boolean">
+                <constraints nullable="true"/>
+            </column>
+            <column name="modified_by" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_by" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+            baseTableName="user_master"
+            baseTableSchemaName="public"
+            baseColumnNames="role_id"
+            constraintName="fk_role_master"
+            referencedTableName="role_master"
+            referencedColumnNames="role_id"
+            referencedTableSchemaName="public"/>
+
+        <insert tableName="user_master" schemaName="public">
+            <column name="user_name" value="superAdmin" />
+            <column name="user_password" value="$2a$10$9UG5YBsQK.dQ6cyg1mpHoOtC9xzrALFfjdRaY6OWelSE7bk.cYorq"/>
+            <column name="role_id" valueComputed="(SELECT role_id FROM public.role_master WHERE role_name = 'admin')" />
+            <column name="is_active" valueBoolean="true"/>
+            <column name="is_deleted" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
