@@ -1,6 +1,7 @@
 package com.amnex.rorsync.util;
 
 import com.amnex.rorsync.configuration.jwt.JwtTokenUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Component
 public class CommonUtils {
@@ -16,6 +18,8 @@ public class CommonUtils {
     private JwtTokenUtil jwtTokenUtil;
 
     private final Logger logger = LoggerFactory.getLogger(CommonUtils.class);
+
+    private final static ObjectMapper objectMapper = new ObjectMapper();
 
     public String getUserId(HttpServletRequest request) {
         String requestTokenHeader = request.getHeader("Authorization");
@@ -38,5 +42,14 @@ public class CommonUtils {
              logger.warn("JWT Token does not begin with Bearer String");
         }
         return userId;
+    }
+
+    public <T> List<T> convertJsonToList(String jsonString, Class<T> clazz) {
+        try {
+            return objectMapper.readValue(jsonString,objectMapper.getTypeFactory().constructCollectionType(List.class, clazz));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

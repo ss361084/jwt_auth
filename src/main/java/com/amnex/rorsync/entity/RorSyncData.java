@@ -13,7 +13,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name = "ror_sync_data",schema = "public")
+@Table(name = "ror_sync_data",schema = "public",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"farmer_id", "farm_id"})
+)
 public class RorSyncData extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

@@ -1,5 +1,6 @@
 package com.amnex.rorsync.mapper;
 
+import com.amnex.rorsync.dto.RorSyncUniqueDto;
 import com.amnex.rorsync.dto.request.RorSyncDto;
 import com.amnex.rorsync.dto.response.RorSyncResDto;
 import com.amnex.rorsync.entity.RorSyncData;
@@ -18,4 +19,6 @@ public interface RorSyncMapper {
             @Mapping(source = "id",target = "rorResponseId")
     })
     RorSyncResDto toResposneDto (RorSyncData rorSyncData);
+
+    RorSyncUniqueDto toUniqueDto(RorSyncDto rorSyncDto);
 }
