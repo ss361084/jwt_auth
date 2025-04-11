@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 @MappedSuperclass
 @Data
 public class BaseEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
     @CreationTimestamp
     private Timestamp createdOn;
 

@@ -1,7 +1,9 @@
 package com.amnex.rorsync.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,6 +11,8 @@ import java.io.Serializable;
 @Entity
 @Data
 @Table
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class UserMaster extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;

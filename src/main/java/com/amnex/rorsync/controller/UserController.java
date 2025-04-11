@@ -2,7 +2,6 @@ package com.amnex.rorsync.controller;
 
 import com.amnex.rorsync.dto.request.UserDto;
 import com.amnex.rorsync.dto.response.ResponseModel;
-import com.amnex.rorsync.dto.response.UserLoginResponse;
 import com.amnex.rorsync.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -95,4 +95,27 @@
             <column name="is_deleted" valueBoolean="false"/>
         </insert>
     </changeSet>
+    <changeSet id="110420251020" author="sumit.sharma" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ror_sync_data" schemaName="public"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ror_sync_data" schemaName="public">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="vault_ref_number" type="VARCHAR(255)"/>
+            <column name="farmer_status" type="VARCHAR(255)"/>
+            <column name="farmer_id" type="VARCHAR(255)"/>
+            <column name="push_id" type="BIGINT"/>
+            <column name="owner_name" type="VARCHAR(255)"/>
+            <column name="identifier_name" type="VARCHAR(255)"/>
+            <column name="survey_no" type="VARCHAR(255)"/>
+            <column name="farm_id" type="VARCHAR(255)"/>
+            <column name="village_lgd_code" type="BIGINT"/>
+            <column name="unique_code" type="VARCHAR(255)"/>
+            <column name="phone_number" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
