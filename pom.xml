@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.amnex</groupId>
-	<artifactId>rorsync</artifactId>
+	<artifactId>fr_farmer_farm_sync</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>rorsync</name>
-	<description>Ror data sync process</description>
+	<name>fr_farmer_farm_sync</name>
+	<description>Fr Farmer Farm data process</description>
 	<url/>
 	<licenses>
 		<license/>
