@@ -1,8 +1,10 @@
 package com.amnex.fr_farmer_farm_sync.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FrFarmerFarmDto {
     private String vaultRefNumber;
     private String farmerStatus;
@@ -16,4 +18,7 @@ public class FrFarmerFarmDto {
     private String uniqueCode;
     private String phoneNumber;
     private String vaultRefSource;
+    private String farmerAddress;
+    private String farmerEmail;
+    private String farmerAadhaarSha256;
 }

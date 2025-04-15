@@ -116,6 +116,9 @@
             <column name="village_lgd_code" type="BIGINT"/>
             <column name="unique_code" type="VARCHAR(255)"/>
             <column name="phone_number" type="VARCHAR(255)"/>
+            <column name="farmer_address" type="VARCHAR(255)"/>
+            <column name="farmer_email" type="VARCHAR(255)"/>
+            <column name="farmer_aadhaar_sha_256" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

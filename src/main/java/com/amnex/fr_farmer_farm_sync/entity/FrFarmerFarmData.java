@@ -55,4 +55,13 @@ public class FrFarmerFarmData extends BaseEntity implements Serializable {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "farmer_address")
+    private String farmerAddress;
+
+    @Column(name = "farmer_email")
+    private String farmerEmail;
+
+    @Column(name = "farmer_aadhaar_sha_256")
+    private String farmerAadhaarSha256;
 }
